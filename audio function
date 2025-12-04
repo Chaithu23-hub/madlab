@@ -1,0 +1,208 @@
+Program:  
+activity_main.xml  
+<?xml version="1.0" encoding="utf-8"?>  
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"     
+xmlns:tools="http://schemas.android.com/tools"     
+android:layout_width="match_parent"     android:layout_height="match_parent"  
+    android:orientation="vertical"     
+tools:context=".MainActivity"  
+    android:padding="16dp">  
+  
+    <!-- Display current ringer mode -->  
+    <TextView  
+        android:id="@+id/text"         
+android:layout_width="wrap_content"         
+android:layout_height="wrap_content"         android:text="Current 
+Ring Mode: -"  
+        android:textAppearance="?android:attr/textAppearanceLarge"         
+android:layout_marginBottom="10dp" />  
+  
+    <!-- Radio Buttons for ringer modes -->  
+    <RadioGroup  
+        android:id="@+id/radioRinger"         
+android:layout_width="wrap_content"         
+android:layout_height="wrap_content"         
+android:layout_marginTop="10dp">  
+  
+        <RadioButton  
+            android:id="@+id/radioNormal"  
+            android:layout_width="wrap_content"             
+android:layout_height="wrap_content"             android:checked="true"  
+            android:text="Normal" />  
+  
+        <RadioButton             
+android:id="@+id/radioSilent"             
+android:layout_width="wrap_content"             
+android:layout_height="wrap_content"             
+android:text="Silent" />  
+  
+        <RadioButton             
+android:id="@+id/vibrate"             
+android:layout_width="wrap_content"             
+android:layout_height="wrap_content"  
+            android:text="Vibrate" />  
+    </RadioGroup>  
+  
+    <!-- Button to apply mode -->  
+    <Button         android:id="@+id/mode"         
+android:layout_width="wrap_content"         
+android:layout_height="wrap_content"         
+android:layout_marginTop="20dp"  
+        android:text="Choose Mode" />  
+  
+    <!-- Volume control section -->  
+    <TextView         
+android:id="@+id/volumeLabel"         
+android:layout_width="wrap_content"         
+android:layout_height="wrap_content"         
+android:text="Adjust the volume:"  
+        android:layout_marginTop="20dp" />  
+  
+    <LinearLayout         
+android:layout_width="wrap_content"         
+android:layout_height="wrap_content"         
+android:orientation="horizontal"  
+        android:layout_marginTop="10dp">  
+  
+        <Button             
+android:id="@+id/increase"             
+style="?android:attr/buttonStyleSmall"             
+android:layout_width="wrap_content"             
+android:layout_height="wrap_content"  
+            android:text="+" />  
+  
+        <Button  
+            android:id="@+id/decrease"             
+style="?android:attr/buttonStyleSmall"             
+android:layout_width="wrap_content"             
+android:layout_height="wrap_content"  
+            android:text="-" />  
+    </LinearLayout>  
+</LinearLayout>  
+  
+MainActivity.java  
+package com.example.myapplication;  
+  
+import android.app.Activity; import 
+android.content.Context; import 
+android.media.AudioManager;  
+import android.os.Bundle; import 
+android.view.View; import 
+android.widget.Button; import 
+android.widget.RadioButton; import 
+android.widget.RadioGroup; import 
+android.widget.TextView;  
+import android.widget.Toast;  
+  
+public class MainActivity extends Activity {  
+  
+    private Button modeBtn, increaseBtn, decreaseBtn;     
+private RadioButton normal, silent, vibrate;     private 
+RadioGroup ringGroup;  
+    private TextView status;  
+    private AudioManager myAudioManager;  
+  
+    @Override  
+    protected void onCreate(Bundle savedInstanceState) {         
+super.onCreate(savedInstanceState);         setContentView(R.layout.activity_main);  
+        myAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);  
+  
+        // Initialize UI components         normal = 
+findViewById(R.id.radioNormal);         silent = 
+findViewById(R.id.radioSilent);         vibrate = 
+findViewById(R.id.vibrate);         ringGroup = 
+findViewById(R.id.radioRinger);  
+        status = findViewById(R.id.text);         
+modeBtn = findViewById(R.id.mode);         
+increaseBtn = findViewById(R.id.increase);         
+decreaseBtn = findViewById(R.id.decrease);  
+  
+        // Display current mode on startup         
+showCurrentRingerMode();  
+  
+        // Choose mode button listener         
+modeBtn.setOnClickListener(v -> {  
+            int selectedId = ringGroup.getCheckedRadioButtonId();  
+  
+            if (selectedId == silent.getId()) {  
+                silentEnable();  
+            } else if (selectedId == normal.getId()) {                 
+normalEnable();  
+            } else if (selectedId == vibrate.getId()) {  
+                vibrateEnable();  
+            }  
+        });  
+  
+        // Increase volume  
+        increaseBtn.setOnClickListener(v -> {  
+            myAudioManager.adjustVolume(AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);             
+Toast.makeText(getApplicationContext(), "Volume increased", Toast.LENGTH_SHORT).show();  
+        });  
+  
+        // Decrease volume  
+        decreaseBtn.setOnClickListener(v -> {  
+            myAudioManager.adjustVolume(AudioManager.ADJUST_LOWER,  
+AudioManager.FLAG_SHOW_UI);  
+            Toast.makeText(getApplicationContext(), "Volume decreased", Toast.LENGTH_SHORT).show();  
+        });  
+    }  
+  
+    // --- Mode Methods ---     
+public void vibrateEnable() {  
+        myAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);         
+status.setText("Current Status: Vibrate Mode");  
+    }  
+  
+    public void normalEnable() {  
+        myAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);         
+status.setText("Current Status: Normal Mode");  
+    }  
+  
+    public void silentEnable() {  
+        myAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);         
+status.setText("Current Status: Silent Mode");  
+    }  
+  
+    private void showCurrentRingerMode() {         int 
+mode = myAudioManager.getRingerMode();         switch 
+(mode) {             case 
+AudioManager.RINGER_MODE_NORMAL:                 
+status.setText("Current Status: Normal Mode");                 
+break;             case 
+AudioManager.RINGER_MODE_SILENT:                 
+status.setText("Current Status: Silent Mode");                 
+break;             case 
+AudioManager.RINGER_MODE_VIBRATE:                 
+status.setText("Current Status: Vibrate Mode");                 
+break;  
+        }  
+    }  
+}  
+  
+AndroidManifest.xml  
+<?xml version="1.0" encoding="utf-8"?>  
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"     
+xmlns:tools="http://schemas.android.com/tools"  
+    package="com.example.myapplication">  
+  
+    <uses-sdk         
+android:minSdkVersion="24"  
+        android:targetSdkVersion="34" />  
+  
+    <application  
+        android:allowBackup="true"         
+android:icon="@mipmap/ic_launcher"         
+android:label="@string/app_name"  
+        android:theme="@style/Theme.MyApplication">  
+          
+        <activity  
+            android:name=".MainActivity"             
+android:exported="true"             
+android:label="@string/app_name">             <intent-filter>  
+                <action android:name="android.intent.action.MAIN" />  
+                <category android:name="android.intent.category.LAUNCHER" />  
+            </intent-filter>  
+        </activity>  
+          
+    </application>  
+</manifest>  
