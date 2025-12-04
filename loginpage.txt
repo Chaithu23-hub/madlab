@@ -1,0 +1,81 @@
+Program:  
+activity_main.xml  
+<?xml version="1.0" encoding="utf-8"?>  
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"     
+android:layout_width="match_parent"     
+android:layout_height="match_parent"  
+android:orientation="vertical"     
+android:gravity="center_vertical"     
+android:padding="24dp"  
+android:background="#F5F5F5">  
+<!-- Username EditText -->  
+<EditText  
+android:id="@+id/editTextUsername"         
+android:layout_width="match_parent"         
+android:layout_height="60dp"         
+android:layout_marginBottom="16dp"         
+android:hint="Username"         
+android:inputType="textPersonName"         
+android:padding="10dp" />  
+<!-- Password EditText -->  
+<EditText  
+        android:id="@+id/editTextPassword"         
+android:layout_width="match_parent"         
+android:layout_height="60dp"         android:layout_marginBottom="24dp"         
+android:hint="Password"         android:inputType="textPassword"  
+        android:padding="10dp" />  
+  
+    <!-- Login Button -->     <Button         
+android:id="@+id/buttonLogin"         
+android:layout_width="match_parent"         
+android:layout_height="wrap_content"         
+android:text="Login"         
+android:backgroundTint="#3F51B5"         
+android:textColor="#FFFFFF"         
+android:textSize="18sp" />  
+</LinearLayout>  
+  
+MainActivity.java  
+  
+package com.example.myapplication;  
+  
+import android.os.Bundle; 
+import android.view.View; 
+import android.widget.Button; 
+import android.widget.EditText; 
+import android.widget.Toast;  
+import androidx.appcompat.app.AppCompatActivity;  
+  
+public class MainActivity extends AppCompatActivity {  
+  
+    private EditText editTextUsername, editTextPassword;     
+private Button buttonLogin;  
+  
+    @Override  
+    protected void onCreate(Bundle savedInstanceState) {         
+super.onCreate(savedInstanceState);         
+setContentView(R.layout.activity_main);  
+  
+        // Initialize UI elements  
+        editTextUsername = findViewById(R.id.editTextUsername);         
+editTextPassword = findViewById(R.id.editTextPassword);  
+        buttonLogin = findViewById(R.id.buttonLogin);  
+  
+        // Set a click listener for the login button  
+        buttonLogin.setOnClickListener(new View.OnClickListener() {             @Override  
+            public void onClick(View view) {  
+                // Retrieve entered username and password  
+                String username = editTextUsername.getText().toString();                 
+String password = editTextPassword.getText().toString();  
+  
+                // Authentication logic  
+                if (username.equals("bhaskar") && password.equals("143")) {  
+                    Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();  
+                } else {  
+                    Toast.makeText(MainActivity.this, "Invalid username or password",  
+Toast.LENGTH_SHORT).show();  
+                }  
+            }  
+        });  
+    }  
+}  
