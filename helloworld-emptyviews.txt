@@ -1,0 +1,52 @@
+Program:  
+activity_main.xml  
+<?xml version="1.0" encoding="utf-8"?>  
+<LinearLayout 
+xmlns:android="http://schemas.android.com/apk/res/android"     
+xmlns:tools="http://schemas.android.com/tools"     
+android:layout_width="match_parent"     
+android:layout_height="match_parent"     android:background="#CDDC39"     
+android:orientation="vertical"     tools:context=".MainActivity">  
+<TextView         
+android:layout_width="match_parent"         
+android:layout_height="wrap_content"  
+android:text="Hello world"         
+android:textAlignment="center"         
+android:textColor="#29F"  
+android:textSize="40sp" />  
+<TextView         
+android:layout_width="match_parent"         
+android:layout_height="wrap_content"  
+android:text="hello world"         
+android:textAlignment="center"         
+android:textColor="#FF5722"         
+android:textSize="40sp" />     <TextView         
+android:layout_width="match_parent"         
+android:layout_height="wrap_content"         
+android:text="Hello world"         
+android:textAlignment="center"         
+android:textColor="#29F"         android:textSize="30sp" />  
+  
+    <TextView         
+android:layout_width="match_parent"         
+android:layout_height="wrap_content"         
+android:text="hello world"         
+android:textAlignment="center"         
+android:textColor="#FF5722"  
+        android:textSize="40sp" />  
+  
+</LinearLayout>  
+  
+MainActivity.kt  
+  
+package com.example.myapplication  
+  
+import android.os.Bundle  
+import androidx.appcompat.app.AppCompatActivity  
+  
+class MainActivity : AppCompatActivity() {     override 
+fun onCreate(savedInstanceState: Bundle?) {         
+super.onCreate(savedInstanceState)  
+        setContentView(R.layout.activity_main)  
+    }  
+}  
