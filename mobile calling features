@@ -1,0 +1,118 @@
+Program:  
+activity_main.xml  
+<?xml version="1.0" encoding="utf-8"?>  
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"     
+xmlns:tools="http://schemas.android.com/tools"     
+android:layout_width="match_parent"     
+android:layout_height="match_parent"     tools:context=".MainActivity">  
+<!-- Edit text for phone number -->  
+<EditText         
+android:id="@+id/editText"         
+android:layout_width="216dp"         
+android:layout_height="61dp"         
+android:hint="Enter phone number"         
+android:inputType="phone"         
+android:layout_centerHorizontal="true"         
+android:layout_marginTop="30dp" />  
+<!-- Button to make call -->  
+<Button  
+android:id="@+id/button"         
+android:layout_width="wrap_content"         
+android:layout_height="wrap_content"         
+android:layout_below="@id/editText"         
+android:layout_centerHorizontal="true"         
+android:layout_marginTop="30dp"         
+android:text="Make 
+Call!!" />  
+</RelativeLayout>  
+  
+MainActivity.java package 
+com.example.myapplication;  
+  
+import android.Manifest; import 
+android.content.Intent; import 
+android.content.pm.PackageManager;  
+import android.net.Uri; import 
+android.os.Bundle; import 
+android.widget.Button; import 
+android.widget.EditText;  
+import android.widget.Toast;  
+  
+import androidx.appcompat.app.AppCompatActivity; import 
+androidx.core.app.ActivityCompat;  
+import androidx.core.content.ContextCompat;  
+  
+public class MainActivity extends AppCompatActivity {  
+    EditText editText;  
+    Button button;  
+  
+    private static final int REQUEST_CALL = 1;  
+  
+    @Override  
+    protected void onCreate(Bundle savedInstanceState) {         
+super.onCreate(savedInstanceState);  
+        setContentView(R.layout.activity_main);  
+  
+        button = findViewById(R.id.button);  
+        editText = findViewById(R.id.editText);  
+  
+        button.setOnClickListener(v -> makePhoneCall());  
+    }  
+  
+    private void makePhoneCall() {  
+        String number = editText.getText().toString().trim();  
+  
+        if (number.isEmpty()) {  
+            Toast.makeText(this, "Enter a phone number", Toast.LENGTH_SHORT).show();  
+        } else {  
+            // Check runtime permission  
+            if (ContextCompat.checkSelfPermission(MainActivity.this,  
+                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {                 
+ActivityCompat.requestPermissions(MainActivity.this,  
+                        new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);  
+            } else {  
+                String dial = "tel:" + number;  
+                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));  
+            }  
+        }  
+    }  
+  
+    // Handle permission result  
+    @Override  
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {         
+if (requestCode == REQUEST_CALL) {  
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {                 
+makePhoneCall();             } else {  
+                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();  
+            }  
+        }  
+    }  
+}  
+  
+AndroidManifest.xml  
+<?xml version="1.0" encoding="utf-8"?>  
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"     
+xmlns:tools="http://schemas.android.com/tools"     package="com.example.myapplication">  
+  
+    <!-- Permission for phone call -->  
+    <uses-permission android:name="android.permission.CALL_PHONE" />  
+  
+    <application  
+        android:allowBackup="true"  
+        android:dataExtractionRules="@xml/data_extraction_rules"         
+android:fullBackupContent="@xml/backup_rules"         
+android:icon="@mipmap/ic_launcher"         android:label="@string/app_name"  
+        android:roundIcon="@mipmap/ic_launcher_round"         
+android:supportsRtl="true"  
+        android:theme="@style/Theme.MyApplication"         
+tools:targetApi="31">  
+  
+        <activity  
+            android:name=".MainActivity"             
+android:exported="true">             <intent-filter>  
+                <action android:name="android.intent.action.MAIN" />  
+                <category android:name="android.intent.category.LAUNCHER" />  
+            </intent-filter>  
+        </activity>  
+  
+    </application> </manifest> 
